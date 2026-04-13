@@ -1,0 +1,27 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  full_name: MyString
+  process_number: MyString
+  birth_date: 2026-04-13
+  nationality: MyString
+  naturalness: MyString
+  cpf: MyString
+  rg: MyString
+  observations: MyText
+  sex_type: one
+  race_type: one
+  blood_type: one
+
+two:
+  full_name: MyString
+  process_number: MyString
+  birth_date: 2026-04-13
+  nationality: MyString
+  naturalness: MyString
+  cpf: MyString
+  rg: MyString
+  observations: MyText
+  sex_type: two
+  race_type: two
+  blood_type: two

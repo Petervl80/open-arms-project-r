@@ -1,4 +1,4 @@
-class CreateFileAssets < ActiveRecord::Migration[7.1]
+class CreateFileAssets < ActiveRecord::Migration[8.1]
   def change
     create_table :file_assets do |t|
       t.string :file_name, null: false

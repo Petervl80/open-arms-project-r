@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_13_194842) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_13_195900) do
   create_table "blood_types", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "description", null: false
@@ -23,6 +23,28 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_13_194842) do
     t.string "description", null: false
     t.datetime "updated_at", null: false
     t.index ["description"], name: "index_child_contact_roles_on_description", unique: true
+  end
+
+  create_table "children", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.date "birth_date"
+    t.bigint "blood_type_id"
+    t.string "cpf"
+    t.datetime "created_at", null: false
+    t.string "full_name", null: false
+    t.string "nationality"
+    t.string "naturalness"
+    t.text "observations"
+    t.string "process_number"
+    t.bigint "race_type_id"
+    t.string "rg"
+    t.bigint "sex_type_id"
+    t.datetime "updated_at", null: false
+    t.index ["blood_type_id"], name: "index_children_on_blood_type_id"
+    t.index ["cpf"], name: "index_children_on_cpf", unique: true
+    t.index ["full_name"], name: "index_children_on_full_name"
+    t.index ["process_number"], name: "index_children_on_process_number", unique: true
+    t.index ["race_type_id"], name: "index_children_on_race_type_id"
+    t.index ["sex_type_id"], name: "index_children_on_sex_type_id"
   end
 
   create_table "family_sides", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -129,5 +151,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_13_194842) do
     t.index ["email"], name: "index_user_accounts_on_email", unique: true
   end
 
+  add_foreign_key "children", "blood_types"
+  add_foreign_key "children", "race_types"
+  add_foreign_key "children", "sex_types"
   add_foreign_key "file_assets", "file_types"
 end
