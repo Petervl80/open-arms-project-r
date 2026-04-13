@@ -10,7 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_13_200754) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_13_203725) do
+  create_table "action_plan_items", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.text "activity", null: false
+    t.bigint "child_id", null: false
+    t.datetime "created_at", null: false
+    t.date "date", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "updated_by_id", null: false
+    t.index ["child_id"], name: "index_action_plan_items_on_child_id"
+    t.index ["updated_by_id"], name: "index_action_plan_items_on_updated_by_id"
+  end
+
   create_table "blood_types", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "description", null: false
@@ -80,6 +91,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_13_200754) do
     t.index ["updated_by_id"], name: "index_contacts_on_updated_by_id"
   end
 
+  create_table "family_events", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "child_id", null: false
+    t.datetime "created_at", null: false
+    t.date "date", null: false
+    t.text "description"
+    t.datetime "updated_at", null: false
+    t.bigint "updated_by_id", null: false
+    t.index ["child_id"], name: "index_family_events_on_child_id"
+    t.index ["updated_by_id"], name: "index_family_events_on_updated_by_id"
+  end
+
   create_table "family_sides", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "description", null: false
@@ -117,6 +139,19 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_13_200754) do
     t.string "description", null: false
     t.datetime "updated_at", null: false
     t.index ["description"], name: "index_individual_care_types_on_description", unique: true
+  end
+
+  create_table "individual_cares", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "child_id", null: false
+    t.datetime "created_at", null: false
+    t.date "date", null: false
+    t.bigint "individual_care_type_id", null: false
+    t.text "notes"
+    t.datetime "updated_at", null: false
+    t.bigint "updated_by_id", null: false
+    t.index ["child_id"], name: "index_individual_cares_on_child_id"
+    t.index ["individual_care_type_id"], name: "index_individual_cares_on_individual_care_type_id"
+    t.index ["updated_by_id"], name: "index_individual_cares_on_updated_by_id"
   end
 
   create_table "permissions", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -184,6 +219,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_13_200754) do
     t.index ["email"], name: "index_user_accounts_on_email", unique: true
   end
 
+  add_foreign_key "action_plan_items", "children"
+  add_foreign_key "action_plan_items", "user_accounts", column: "updated_by_id"
   add_foreign_key "child_contacts", "child_contact_roles"
   add_foreign_key "child_contacts", "children"
   add_foreign_key "child_contacts", "contacts"
@@ -193,5 +230,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_13_200754) do
   add_foreign_key "children", "sex_types"
   add_foreign_key "contacts", "family_sides"
   add_foreign_key "contacts", "user_accounts", column: "updated_by_id"
+  add_foreign_key "family_events", "children"
+  add_foreign_key "family_events", "user_accounts", column: "updated_by_id"
   add_foreign_key "file_assets", "file_types"
+  add_foreign_key "individual_cares", "children"
+  add_foreign_key "individual_cares", "individual_care_types"
+  add_foreign_key "individual_cares", "user_accounts", column: "updated_by_id"
 end

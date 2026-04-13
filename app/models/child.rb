@@ -12,10 +12,14 @@ class Child < ApplicationRecord
   # Relacionamento de Auditoria
   belongs_to :updater, class_name: 'UserAccount', foreign_key: 'updated_by'
 
-  # Relacionamento com Contacos
+  # Relacionamento com Contatos
   has_many :child_contacts, dependent: :destroy
   has_many :contacts, through: :child_contacts
   accepts_nested_attributes_for :child_contacts, allow_destroy: true
+
+  has_many :action_plan_items, dependent: :destroy
+  has_many :family_events, dependent: :destroy
+  has_many :individual_cares, dependent: :destroy
 
   # Validações Básicas
   validates :full_name, presence: true, length: { maximum: 70 }
