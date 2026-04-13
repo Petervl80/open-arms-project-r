@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  child: one
+  date: 2026-04-13
+  health_event_type: one
+  notes: MyText
+
+two:
+  child: two
+  date: 2026-04-13
+  health_event_type: two
+  notes: MyText

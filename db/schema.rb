@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_13_203725) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_13_204516) do
   create_table "action_plan_items", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.text "activity", null: false
     t.bigint "child_id", null: false
@@ -134,6 +134,19 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_13_203725) do
     t.index ["description"], name: "index_health_event_types_on_description", unique: true
   end
 
+  create_table "health_events", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "child_id", null: false
+    t.datetime "created_at", null: false
+    t.date "date", null: false
+    t.bigint "health_event_type_id", null: false
+    t.text "notes"
+    t.datetime "updated_at", null: false
+    t.bigint "updated_by_id", null: false
+    t.index ["child_id"], name: "index_health_events_on_child_id"
+    t.index ["health_event_type_id"], name: "index_health_events_on_health_event_type_id"
+    t.index ["updated_by_id"], name: "index_health_events_on_updated_by_id"
+  end
+
   create_table "individual_care_types", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "description", null: false
@@ -199,11 +212,46 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_13_203725) do
     t.index ["description"], name: "index_school_event_types_on_description", unique: true
   end
 
+  create_table "school_progresses", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "child_id", null: false
+    t.datetime "created_at", null: false
+    t.date "date", null: false
+    t.text "notes"
+    t.bigint "school_event_type_id", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "updated_by_id", null: false
+    t.index ["child_id"], name: "index_school_progresses_on_child_id"
+    t.index ["school_event_type_id"], name: "index_school_progresses_on_school_event_type_id"
+    t.index ["updated_by_id"], name: "index_school_progresses_on_updated_by_id"
+  end
+
   create_table "sex_types", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "description", null: false
     t.datetime "updated_at", null: false
     t.index ["description"], name: "index_sex_types_on_description", unique: true
+  end
+
+  create_table "social_activities", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "child_id", null: false
+    t.datetime "created_at", null: false
+    t.date "date", null: false
+    t.text "description"
+    t.datetime "updated_at", null: false
+    t.bigint "updated_by_id", null: false
+    t.index ["child_id"], name: "index_social_activities_on_child_id"
+    t.index ["updated_by_id"], name: "index_social_activities_on_updated_by_id"
+  end
+
+  create_table "social_development_entries", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "child_id", null: false
+    t.datetime "created_at", null: false
+    t.date "date", null: false
+    t.text "description"
+    t.datetime "updated_at", null: false
+    t.bigint "updated_by_id", null: false
+    t.index ["child_id"], name: "index_social_development_entries_on_child_id"
+    t.index ["updated_by_id"], name: "index_social_development_entries_on_updated_by_id"
   end
 
   create_table "user_accounts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -233,7 +281,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_13_203725) do
   add_foreign_key "family_events", "children"
   add_foreign_key "family_events", "user_accounts", column: "updated_by_id"
   add_foreign_key "file_assets", "file_types"
+  add_foreign_key "health_events", "children"
+  add_foreign_key "health_events", "health_event_types"
+  add_foreign_key "health_events", "user_accounts", column: "updated_by_id"
   add_foreign_key "individual_cares", "children"
   add_foreign_key "individual_cares", "individual_care_types"
   add_foreign_key "individual_cares", "user_accounts", column: "updated_by_id"
+  add_foreign_key "school_progresses", "children"
+  add_foreign_key "school_progresses", "school_event_types"
+  add_foreign_key "school_progresses", "user_accounts", column: "updated_by_id"
+  add_foreign_key "social_activities", "children"
+  add_foreign_key "social_activities", "user_accounts", column: "updated_by_id"
+  add_foreign_key "social_development_entries", "children"
+  add_foreign_key "social_development_entries", "user_accounts", column: "updated_by_id"
 end
