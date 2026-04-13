@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  child: one
+  contact: one
+  child_contact_role: one
+
+two:
+  child: two
+  contact: two
+  child_contact_role: two

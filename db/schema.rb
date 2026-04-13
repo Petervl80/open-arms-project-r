@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_13_195900) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_13_200754) do
   create_table "blood_types", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "description", null: false
@@ -23,6 +23,22 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_13_195900) do
     t.string "description", null: false
     t.datetime "updated_at", null: false
     t.index ["description"], name: "index_child_contact_roles_on_description", unique: true
+  end
+
+  create_table "child_contacts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "child_contact_role_id", null: false
+    t.bigint "child_id", null: false
+    t.bigint "contact_id", null: false
+    t.datetime "created_at", null: false
+    t.boolean "is_primary", default: false
+    t.integer "sequence"
+    t.datetime "updated_at", null: false
+    t.bigint "updated_by_id", null: false
+    t.index ["child_contact_role_id"], name: "index_child_contacts_on_child_contact_role_id"
+    t.index ["child_id", "contact_id"], name: "index_child_contacts_on_child_id_and_contact_id", unique: true
+    t.index ["child_id"], name: "index_child_contacts_on_child_id"
+    t.index ["contact_id"], name: "index_child_contacts_on_contact_id"
+    t.index ["updated_by_id"], name: "index_child_contacts_on_updated_by_id"
   end
 
   create_table "children", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -45,6 +61,23 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_13_195900) do
     t.index ["process_number"], name: "index_children_on_process_number", unique: true
     t.index ["race_type_id"], name: "index_children_on_race_type_id"
     t.index ["sex_type_id"], name: "index_children_on_sex_type_id"
+  end
+
+  create_table "contacts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "city", limit: 50
+    t.datetime "created_at", null: false
+    t.string "district", limit: 50
+    t.bigint "family_side_id"
+    t.string "full_name", limit: 50, null: false
+    t.text "notes"
+    t.string "occupation", limit: 30
+    t.string "phone", limit: 20
+    t.string "state", limit: 30
+    t.string "street", limit: 50
+    t.datetime "updated_at", null: false
+    t.bigint "updated_by_id", null: false
+    t.index ["family_side_id"], name: "index_contacts_on_family_side_id"
+    t.index ["updated_by_id"], name: "index_contacts_on_updated_by_id"
   end
 
   create_table "family_sides", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -151,8 +184,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_13_195900) do
     t.index ["email"], name: "index_user_accounts_on_email", unique: true
   end
 
+  add_foreign_key "child_contacts", "child_contact_roles"
+  add_foreign_key "child_contacts", "children"
+  add_foreign_key "child_contacts", "contacts"
+  add_foreign_key "child_contacts", "user_accounts", column: "updated_by_id"
   add_foreign_key "children", "blood_types"
   add_foreign_key "children", "race_types"
   add_foreign_key "children", "sex_types"
+  add_foreign_key "contacts", "family_sides"
+  add_foreign_key "contacts", "user_accounts", column: "updated_by_id"
   add_foreign_key "file_assets", "file_types"
 end
