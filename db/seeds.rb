@@ -31,3 +31,18 @@ domains.each do |model, values|
 end
 
 puts "Tabelas de domínio migradas com sucesso!"
+
+puts "Criando usuário admin"
+
+admin_role = Role.find_or_create_by!(description: 'ROLE_ADMIN')
+user_role  = Role.find_or_create_by!(description: 'ROLE_USER')
+
+admin = UserAccount.find_or_create_by!(email: 'admin@openarms.com') do |u|
+  u.full_name = 'Administrador Sistema'
+  u.password = 'admin123' # O has_secure_password vai transformar isso em hash
+  u.enabled = true
+end
+
+admin.roles << admin_role unless admin.roles.include?(admin_role)
+
+puts "Usuário Admin criado com sucesso!"

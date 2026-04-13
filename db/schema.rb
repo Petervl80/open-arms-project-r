@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_13_191150) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_13_193355) do
   create_table "blood_types", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "description", null: false
@@ -53,6 +53,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_13_191150) do
     t.index ["description"], name: "index_individual_care_types_on_description", unique: true
   end
 
+  create_table "permissions", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "description"
+    t.datetime "updated_at", null: false
+    t.index ["description"], name: "index_permissions_on_description"
+  end
+
+  create_table "permissions_roles", id: false, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "permission_id", null: false
+    t.bigint "role_id", null: false
+  end
+
   create_table "process_types", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "description", null: false
@@ -67,6 +79,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_13_191150) do
     t.index ["description"], name: "index_race_types_on_description", unique: true
   end
 
+  create_table "roles", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "description"
+    t.datetime "updated_at", null: false
+    t.index ["description"], name: "index_roles_on_description"
+  end
+
+  create_table "roles_user_accounts", id: false, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "role_id", null: false
+    t.bigint "user_account_id", null: false
+  end
+
   create_table "school_event_types", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "description", null: false
@@ -79,5 +103,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_13_191150) do
     t.string "description", null: false
     t.datetime "updated_at", null: false
     t.index ["description"], name: "index_sex_types_on_description", unique: true
+  end
+
+  create_table "user_accounts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.boolean "account_non_expired", default: true
+    t.boolean "account_non_locked", default: true
+    t.datetime "created_at", null: false
+    t.boolean "credentials_non_expired", default: true
+    t.string "email", null: false
+    t.boolean "enabled", default: true
+    t.string "full_name"
+    t.string "password_digest"
+    t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_user_accounts_on_email", unique: true
   end
 end

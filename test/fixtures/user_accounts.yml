@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  email: MyString
+  password_digest: MyString
+  full_name: MyString
+  enabled: false
+  account_non_expired: false
+  account_non_locked: false
+  credentials_non_expired: false
+
+two:
+  email: MyString
+  password_digest: MyString
+  full_name: MyString
+  enabled: false
+  account_non_expired: false
+  account_non_locked: false
+  credentials_non_expired: false
