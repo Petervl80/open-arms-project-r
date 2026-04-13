@@ -1,0 +1,2 @@
+class IndividualCareType < ApplicationRecord
+end

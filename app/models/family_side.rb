@@ -1,0 +1,2 @@
+class FamilySide < ApplicationRecord
+end

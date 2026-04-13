@@ -1,0 +1,2 @@
+class SexType < ApplicationRecord
+end

@@ -1,0 +1,2 @@
+class HealthEventType < ApplicationRecord
+end

@@ -1,0 +1,2 @@
+class ProcessType < ApplicationRecord
+end
