@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_13_193355) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_13_194842) do
   create_table "blood_types", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "description", null: false
@@ -30,6 +30,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_13_193355) do
     t.string "description", null: false
     t.datetime "updated_at", null: false
     t.index ["description"], name: "index_family_sides_on_description", unique: true
+  end
+
+  create_table "file_assets", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "content_type", null: false
+    t.datetime "created_at", null: false
+    t.string "file_name", null: false
+    t.bigint "file_type_id", null: false
+    t.bigint "size", null: false
+    t.string "storage_path", null: false
+    t.datetime "updated_at", null: false
+    t.index ["file_type_id"], name: "index_file_assets_on_file_type_id"
   end
 
   create_table "file_types", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -117,4 +128,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_13_193355) do
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_user_accounts_on_email", unique: true
   end
+
+  add_foreign_key "file_assets", "file_types"
 end
