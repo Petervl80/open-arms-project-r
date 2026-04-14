@@ -1,10 +1,12 @@
 class ApplicationController < ActionController::API
 
-    before_action :authorize_request
+  include ActionController::MimeResponds
 
-    private
+  before_action :authorize_request
 
-    def authorize_request
+  private
+
+  def authorize_request
     
     header = request.headers['Authorization']
 

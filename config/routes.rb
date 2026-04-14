@@ -17,7 +17,12 @@ Rails.application.routes.draw do
 
       post '/auth/login', to: 'authentication#login'
 
-      resources :children
+      resources :children do
+        member do
+          get :export_xlsx # Para o Excel
+          get :export_pdf  # Para o PDF
+        end
+      end
 
     end
   end

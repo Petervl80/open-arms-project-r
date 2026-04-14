@@ -1,0 +1,59 @@
+wb = xlsx_package.workbook
+
+# Estilos de cabeçalho e títulos
+header_style = wb.styles.add_style(b: true, bg_color: "ECECEC", border: { style: :thin, color: "000000" })
+title_style = wb.styles.add_style(b: true, sz: 14)
+
+# --- ABA: GERAL ---
+wb.add_worksheet(name: "Geral") do |sheet|
+  sheet.add_row ["PLANO INDIVIDUAL DE ATENDIMENTO - PIA"], style: title_style
+  sheet.add_row ["DADOS PESSOAIS"], style: header_style
+  sheet.add_row ["Processo:", @child.process_number]
+  sheet.add_row ["Nome:", @child.full_name]
+  sheet.add_row ["Data Nasc:", @child.birth_date&.strftime("%d/%m/%Y")]
+  sheet.add_row ["Encaminhado por:", @child.referred_by] #
+  sheet.add_row ["Motivo:", @child.admission_reason] #
+  sheet.add_row ["Condições:", @child.shelter_conditions] #
+end
+
+# --- ABA: PLANO ---
+wb.add_worksheet(name: "Plano") do |sheet|
+  sheet.add_row ["PLANO DE REINTEGRAÇÃO"], style: title_style
+  sheet.add_row ["Data", "Perspectivas e Tentativas"], style: header_style
+  @child.action_plan_items.each do |item| #
+    sheet.add_row [item.date&.strftime("%d/%m/%Y"), item.activity]
+  end
+end
+
+# --- ABA: FAMILIARES ---
+wb.add_worksheet(name: "Familiares") do |sheet|
+  sheet.add_row ["FAMILIARES IDENTIFICADOS"], style: title_style
+  sheet.add_row ["Nome", "Parentesco", "Ocupação", "Contato"], style: header_style
+  @child.child_contacts.each do |cc| #
+    sheet.add_row [cc.contact.full_name, cc.child_contact_role&.description, cc.contact.occupation, cc.contact.phone]
+  end
+end
+
+# --- ABA: SAÚDE ---
+wb.add_worksheet(name: "Saúde") do |sheet|
+  sheet.add_row ["ACOMPANHAMENTO DE SAÚDE"], style: title_style
+  sheet.add_row ["Tipo Sanguíneo:", @child.blood_type&.description]
+  sheet.add_row ["Exames DSTS:", "HIV(#{@child.health_hiv ? '+' : '-'}) / HepB(#{@child.health_hep_b ? '+' : '-'})"] #
+  sheet.add_row []
+  sheet.add_row ["Data", "Evento"], style: header_style
+  @child.health_events.each do |he| #
+    sheet.add_row [he.date&.strftime("%d/%m/%Y"), he.notes]
+  end
+end
+
+# --- ABA: EDUCAÇÃO ---
+wb.add_worksheet(name: "Educação") do |sheet|
+  sheet.add_row ["EVOLUÇÃO PEDAGÓGICA"], style: title_style
+  sheet.add_row ["Escola:", @child.school_name] #
+  sheet.add_row ["Ano:", @child.school_year] #
+  sheet.add_row []
+  sheet.add_row ["Data", "Evento"], style: header_style
+  @child.school_progresses.each do |sp| #
+    sheet.add_row [sp.date&.strftime("%d/%m/%Y"), sp.notes]
+  end
+end

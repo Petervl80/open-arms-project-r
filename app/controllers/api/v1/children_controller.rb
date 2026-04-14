@@ -2,7 +2,7 @@ module Api
     module V1
         class ChildrenController < ApplicationController
 
-            before_action :set_child, only: [:show, :update, :destroy]
+            before_action :set_child, only: [:show, :update, :destroy, :export_xlsx, :export_pdf]
 
             # GET /api/v1/children
             def index
@@ -14,10 +14,32 @@ module Api
             # GET /api/v1/children/1
             def show
                 render json: @child, include: [
-                    :sex_type,
-                    :race_type,
-                    { child_contacts: { include: [:contact, :child_contact_role] } }
+                :sex_type, :race_type, :blood_type, :process_type,
+                { child_contacts: { include: [:contact, :child_contact_role] } }
                 ], status: :ok
+            end
+
+            # GET /api/v1/children/:id/export_xlsx
+            def export_xlsx
+                @child = Child.includes(
+                    :sex_type, :blood_type, :process_type,
+                    :action_plan_items, :health_events, :school_progresses,
+                    :social_activities, :family_events,
+                    { child_contacts: [:contact, :child_contact_role] }
+                    ).find(params[:id])
+
+                respond_to do |format|
+                    format.xlsx {
+                        filename = "PIA_#{@child.full_name.parameterize}.xlsx"
+                        response.headers['Content-Disposition'] = "attachment; filename=\"#{filename}\""
+                    }
+                end
+            end
+
+            # GET /api/v1/children/:id/export_pdf
+            def export_pdf
+                # Lógica similar ao XLSX, mas renderizando PDF
+                # Implementaremos o template HTML que o WickedPDF transformará em arquivo
             end
 
             # POST /api/v1/children
