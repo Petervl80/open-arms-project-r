@@ -1,0 +1,143 @@
+wb = xlsx_package.workbook
+
+# Estilos
+header_style = wb.styles.add_style(b: true, bg_color: "ECECEC", border: { style: :thin, color: "000000" })
+title_style = wb.styles.add_style(b: true, sz: 14)
+bold_style = wb.styles.add_style(b: true)
+
+# --- ABA 1: GERAL ---
+wb.add_worksheet(name: "Geral") do |sheet|
+  sheet.add_row ["Plano Individual de Atendimento PIA"], style: title_style
+  sheet.add_row []
+  
+  sheet.add_row ["Dados pessoais"], style: title_style
+  sheet.add_row ["Numero do processo:", @child.process_number]
+  sheet.add_row ["Nome:", @child.full_name]
+  sheet.add_row ["Data nascimento:", @child.birth_date&.strftime("%Y-%m-%d")]
+  sheet.add_row ["Nacionalidade:", @child.nationality]
+  sheet.add_row ["Naturalidade:", @child.place_of_birth]
+  sheet.add_row []
+  
+  sheet.add_row ["Documentos"], style: title_style
+  sheet.add_row ["N° Certidão de nascimento:", @child.birth_certificate_number]
+  sheet.add_row ["Cartório:", @child.registry_office]
+  sheet.add_row ["CPF:", @child.cpf]
+  sheet.add_row ["RG:", @child.rg]
+  sheet.add_row []
+
+  # Nota: Você pode precisar ajustar os campos abaixo de acordo com as colunas reais do seu banco
+  sheet.add_row ["Dados do Acolhimento"], style: title_style
+  sheet.add_row ["Motivo inicial do acolhimento:", @child.try(:admission_reason)]
+  sheet.add_row ["Condições em que ocorreu o acolhimento:"]
+  sheet.add_row [@child.try(:shelter_conditions)]
+end
+
+# --- ABA 2: PLANO ---
+wb.add_worksheet(name: "Plano") do |sheet|
+  sheet.add_row ["Plano de reintegração"], style: title_style
+  sheet.add_row []
+  sheet.add_row ["Nome:", @child.full_name]
+  sheet.add_row ["Data nascimento:", @child.birth_date&.strftime("%Y-%m-%d")]
+  sheet.add_row []
+  sheet.add_row ["Desenvolvimento do plano para reintegração"], style: title_style
+  sheet.add_row ["Data", "Perspectivas e tentativas"], style: header_style
+  
+  @child.action_plan_items.each do |item|
+    sheet.add_row [item.date&.strftime("%Y-%m-%d"), item.activity]
+  end
+end
+
+# --- ABA 3: FAMILIARES ---
+wb.add_worksheet(name: "Familiares") do |sheet|
+  sheet.add_row ["Familiares identificadas"], style: title_style
+  sheet.add_row []
+  sheet.add_row ["Nome:", @child.full_name]
+  sheet.add_row ["Data nascimento:", @child.birth_date&.strftime("%Y-%m-%d")]
+  sheet.add_row []
+  sheet.add_row ["Nome", "Parentesco", "Ocupação", "Contato"], style: header_style
+  
+  @child.child_contacts.each do |cc|
+    sheet.add_row [cc.contact.full_name, cc.child_contact_role&.description, cc.contact.try(:occupation), cc.contact.try(:phone)]
+  end
+end
+
+# --- ABA 4: SAÚDE ---
+wb.add_worksheet(name: "Saúde") do |sheet|
+  sheet.add_row ["Saúde"], style: title_style
+  sheet.add_row []
+  sheet.add_row ["Nome:", @child.full_name]
+  sheet.add_row ["Data nascimento:", @child.birth_date&.strftime("%Y-%m-%d")]
+  sheet.add_row []
+  sheet.add_row ["Tipo sanguineo:", @child.blood_type&.description]
+  sheet.add_row ["Exames DSTS:", "(HIV- / HepB- / HepC- / Sifilis-)"] # Ajuste dinâmico conforme seus campos de saúde
+  sheet.add_row []
+  sheet.add_row ["Acompanhamento de Saúde"], style: title_style
+  sheet.add_row ["Data", "Evento"], style: header_style
+  
+  @child.health_events.each do |he|
+    sheet.add_row [he.date&.strftime("%Y-%m-%d"), he.notes]
+  end
+end
+
+# --- ABA 5: EDUCAÇÃO ---
+wb.add_worksheet(name: "Educação") do |sheet|
+  sheet.add_row ["Educação"], style: title_style
+  sheet.add_row []
+  sheet.add_row ["Nome:", @child.full_name]
+  sheet.add_row ["Data nascimento:", @child.birth_date&.strftime("%Y-%m-%d")]
+  sheet.add_row []
+  sheet.add_row ["Evolução Pedagógica"], style: title_style
+  sheet.add_row ["Data", "Evento"], style: header_style
+  
+  @child.school_progresses.each do |sp|
+    sheet.add_row [sp.date&.strftime("%Y-%m-%d"), sp.notes]
+  end
+end
+
+# --- ABA 6: COMPORTAMENTO SOCIAIS ---
+wb.add_worksheet(name: "Comp. Sociais") do |sheet|
+  sheet.add_row ["Comportamento Sociais"], style: title_style
+  sheet.add_row []
+  sheet.add_row ["Nome:", @child.full_name]
+  sheet.add_row ["Data nascimento:", @child.birth_date&.strftime("%Y-%m-%d")]
+  sheet.add_row []
+  
+  # Baseado nos campos de comportamento (Ajuste os métodos se os nomes divergirem no Model)
+  sheet.add_row ["Boa convivência:", "sim"], style: bold_style
+  sheet.add_row ["Observação:", @child.try(:good_conviviality_notes)]
+  sheet.add_row ["Conv. conflitos:", "sim"], style: bold_style
+  sheet.add_row ["Observação:", @child.try(:conflict_conviviality_notes)]
+  sheet.add_row ["Resp. regras:", "sim"], style: bold_style
+  sheet.add_row ["Observação:", @child.try(:rule_compliance_notes)]
+  sheet.add_row []
+  
+  sheet.add_row ["Evolução (Atividades Sociais)"], style: title_style
+  sheet.add_row ["Data", "Evento"], style: header_style
+  
+  @child.social_activities.each do |sa|
+    sheet.add_row [sa.date&.strftime("%Y-%m-%d"), sa.activity]
+  end
+end
+
+# --- ABA 7: PIA FAMÍLIA ---
+wb.add_worksheet(name: "PIA Família") do |sheet|
+  sheet.add_row ["PIA - FAMILIAR"], style: title_style
+  sheet.add_row []
+  sheet.add_row ["Nome:", @child.full_name]
+  sheet.add_row ["Data nascimento:", @child.birth_date&.strftime("%Y-%m-%d")]
+  sheet.add_row []
+  
+  sheet.add_row ["Aspectos gerais iniciais da família"], style: bold_style
+  sheet.add_row [@child.try(:family_general_aspects)]
+  sheet.add_row []
+  
+  sheet.add_row ["Compromissos assumidos da família"], style: bold_style
+  sheet.add_row [@child.try(:family_commitments)]
+  sheet.add_row []
+  
+  sheet.add_row ["Data", "Evento"], style: header_style
+  
+  @child.family_events.each do |fe|
+    sheet.add_row [fe.date&.strftime("%Y-%m-%d"), fe.notes]
+  end
+end

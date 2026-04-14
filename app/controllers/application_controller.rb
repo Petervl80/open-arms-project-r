@@ -1,7 +1,5 @@
 class ApplicationController < ActionController::API
 
-  include ActionController::MimeResponds
-
   before_action :authorize_request
 
   private

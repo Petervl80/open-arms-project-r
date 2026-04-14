@@ -17,11 +17,12 @@ Rails.application.routes.draw do
 
       post '/auth/login', to: 'authentication#login'
 
-      resources :children do
-        member do
-          get :export_xlsx # Para o Excel
-          get :export_pdf  # Para o PDF
-        end
+      resources :children
+
+      # Novas rotas dedicadas para exportação, apontando para o novo controller
+      scope :exports do
+        get 'children/:id/xlsx', to: 'exports#export_child_xlsx'
+        get 'children/:id/pdf', to: 'exports#export_child_pdf'
       end
 
     end
