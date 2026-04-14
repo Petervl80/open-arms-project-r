@@ -10,7 +10,7 @@ class Child < ApplicationRecord
   belongs_to :medical_report_file, class_name: 'FileAsset', optional: true
 
   # Relacionamento de Auditoria
-  belongs_to :updater, class_name: 'UserAccount', foreign_key: 'updated_by'
+  belongs_to :updater, class_name: 'UserAccount', foreign_key: 'updated_by_id'
 
   # Relacionamento com Contatos
   has_many :child_contacts, dependent: :destroy

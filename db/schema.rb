@@ -65,25 +65,53 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_14_132218) do
   end
 
   create_table "children", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.date "admission_guide_date"
+    t.string "admission_guide_number", limit: 25
+    t.string "admission_reason", limit: 50
+    t.string "birth_certificate_number", limit: 100
     t.date "birth_date"
     t.bigint "blood_type_id"
-    t.string "cpf"
+    t.text "controlled_medication_notes"
+    t.string "cpf", limit: 14
     t.datetime "created_at", null: false
-    t.string "full_name", null: false
-    t.string "nationality"
-    t.string "naturalness"
-    t.text "observations"
-    t.string "process_number"
+    t.string "disability_notes", limit: 25
+    t.date "discharge_date"
+    t.string "discharge_reason", limit: 50
+    t.text "family_aspects"
+    t.text "family_commitments"
+    t.string "full_name", limit: 70, null: false
+    t.boolean "health_hep_b", default: false
+    t.boolean "health_hep_c", default: false
+    t.boolean "health_hiv", default: false
+    t.boolean "health_syphilis", default: false
+    t.bigint "medical_report_file_id"
+    t.text "medical_report_text"
+    t.string "nationality", limit: 25
+    t.bigint "photo_file_id"
+    t.string "place_of_birth", limit: 25
+    t.string "process_number", limit: 39
+    t.bigint "process_type_id"
     t.bigint "race_type_id"
-    t.string "rg"
+    t.string "referred_by", limit: 50
+    t.string "registry_office", limit: 50
+    t.string "responsible_court", limit: 50
+    t.string "rg", limit: 12
+    t.string "school_name", limit: 50
+    t.integer "school_year"
     t.bigint "sex_type_id"
+    t.text "shelter_conditions"
+    t.string "sus_card_number", limit: 25
     t.datetime "updated_at", null: false
+    t.bigint "updated_by_id", null: false
     t.index ["blood_type_id"], name: "index_children_on_blood_type_id"
     t.index ["cpf"], name: "index_children_on_cpf", unique: true
-    t.index ["full_name"], name: "index_children_on_full_name"
-    t.index ["process_number"], name: "index_children_on_process_number", unique: true
+    t.index ["medical_report_file_id"], name: "index_children_on_medical_report_file_id"
+    t.index ["photo_file_id"], name: "index_children_on_photo_file_id"
+    t.index ["process_number"], name: "index_children_on_process_number"
+    t.index ["process_type_id"], name: "index_children_on_process_type_id"
     t.index ["race_type_id"], name: "index_children_on_race_type_id"
     t.index ["sex_type_id"], name: "index_children_on_sex_type_id"
+    t.index ["updated_by_id"], name: "index_children_on_updated_by_id"
   end
 
   create_table "contacts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -311,8 +339,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_14_132218) do
   add_foreign_key "child_contacts", "contacts"
   add_foreign_key "child_contacts", "user_accounts", column: "updated_by_id"
   add_foreign_key "children", "blood_types"
+  add_foreign_key "children", "file_assets", column: "medical_report_file_id"
+  add_foreign_key "children", "file_assets", column: "photo_file_id"
+  add_foreign_key "children", "process_types"
   add_foreign_key "children", "race_types"
   add_foreign_key "children", "sex_types"
+  add_foreign_key "children", "user_accounts", column: "updated_by_id"
   add_foreign_key "contacts", "family_sides"
   add_foreign_key "contacts", "user_accounts", column: "updated_by_id"
   add_foreign_key "family_events", "children"

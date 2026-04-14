@@ -1,7 +1,7 @@
 class Contact < ApplicationRecord
     belongs_to :family_side, optional: true
     
-    belongs_to :updater, class_name: 'UserAccount', foreign_key: 'updated_by'
+    belongs_to :updater, class_name: 'UserAccount', foreign_key: 'updated_by_id'
 
     has_many :child_contacts, dependent: :destroy
     has_many :children, through: :child_contacts
