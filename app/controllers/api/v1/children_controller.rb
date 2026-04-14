@@ -23,13 +23,11 @@ module Api
             # POST /api/v1/children
             def create
                 @child = Child.new(child_params)
+                
+                @child.updated_by_id = @current_user.id
 
-                current_user_id = UserAccount.first&.id || 1 
-                @child.updated_by_id = current_user_id
-
-                # NOVIDADE: Repassa o usuário para cada contato aninhado
                 @child.child_contacts.each do |nested_contact|
-                    nested_contact.updated_by_id = current_user_id
+                    nested_contact.updated_by_id = @current_user.id
                 end
 
                 if @child.save
@@ -41,10 +39,10 @@ module Api
 
             # PUT /api/v1/children/1
             def update
-                current_user_id = UserAccount.first&.id || 1
+                @child.updated_by_id = @current_user.id
                 @child.assign_attributes(child_params)
 
-                @child.child_contacts.each { |cc| cc.updated_by_id = current_user_id }
+                @child.child_contacts.each { |cc| cc.updated_by_id = @current_user.id }
 
                 if @child.save
                     render json: @child, status: :ok

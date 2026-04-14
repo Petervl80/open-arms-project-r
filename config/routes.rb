@@ -15,7 +15,10 @@ Rails.application.routes.draw do
       resources :family_sides, only: [:index, :show]
       resources :child_contact_roles, only: [:index, :show]
 
+      post '/auth/login', to: 'authentication#login'
+
       resources :children
+
     end
   end
 end
