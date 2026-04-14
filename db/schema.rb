@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_13_204516) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_14_132218) do
   create_table "action_plan_items", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.text "activity", null: false
     t.bigint "child_id", null: false
@@ -20,6 +20,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_13_204516) do
     t.bigint "updated_by_id", null: false
     t.index ["child_id"], name: "index_action_plan_items_on_child_id"
     t.index ["updated_by_id"], name: "index_action_plan_items_on_updated_by_id"
+  end
+
+  create_table "alarms", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "child_id", null: false
+    t.boolean "completed", default: false
+    t.datetime "created_at", null: false
+    t.date "date", null: false
+    t.text "description", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "updated_by_id", null: false
+    t.index ["child_id"], name: "index_alarms_on_child_id"
+    t.index ["updated_by_id"], name: "index_alarms_on_updated_by_id"
   end
 
   create_table "blood_types", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -193,6 +205,29 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_13_204516) do
     t.index ["description"], name: "index_race_types_on_description", unique: true
   end
 
+  create_table "report_children", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "child_id", null: false
+    t.datetime "created_at", null: false
+    t.bigint "report_id", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "updated_by_id", null: false
+    t.index ["child_id"], name: "index_report_children_on_child_id"
+    t.index ["report_id", "child_id"], name: "index_report_children_on_report_id_and_child_id", unique: true
+    t.index ["report_id"], name: "index_report_children_on_report_id"
+    t.index ["updated_by_id"], name: "index_report_children_on_updated_by_id"
+  end
+
+  create_table "reports", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.date "date", null: false
+    t.string "description", limit: 70, null: false
+    t.bigint "file_id", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "updated_by_id", null: false
+    t.index ["file_id"], name: "index_reports_on_file_id"
+    t.index ["updated_by_id"], name: "index_reports_on_updated_by_id"
+  end
+
   create_table "roles", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "description"
@@ -269,6 +304,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_13_204516) do
 
   add_foreign_key "action_plan_items", "children"
   add_foreign_key "action_plan_items", "user_accounts", column: "updated_by_id"
+  add_foreign_key "alarms", "children"
+  add_foreign_key "alarms", "user_accounts", column: "updated_by_id"
   add_foreign_key "child_contacts", "child_contact_roles"
   add_foreign_key "child_contacts", "children"
   add_foreign_key "child_contacts", "contacts"
@@ -287,6 +324,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_13_204516) do
   add_foreign_key "individual_cares", "children"
   add_foreign_key "individual_cares", "individual_care_types"
   add_foreign_key "individual_cares", "user_accounts", column: "updated_by_id"
+  add_foreign_key "report_children", "children"
+  add_foreign_key "report_children", "reports"
+  add_foreign_key "report_children", "user_accounts", column: "updated_by_id"
+  add_foreign_key "reports", "file_assets", column: "file_id"
+  add_foreign_key "reports", "user_accounts", column: "updated_by_id"
   add_foreign_key "school_progresses", "children"
   add_foreign_key "school_progresses", "school_event_types"
   add_foreign_key "school_progresses", "user_accounts", column: "updated_by_id"

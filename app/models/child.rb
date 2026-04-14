@@ -26,6 +26,10 @@ class Child < ApplicationRecord
   has_many :social_development_entries, dependent: :destroy
   has_many :social_activities, dependent: :destroy
 
+  has_many :alarms, dependent: :destroy
+  has_many :report_children, dependent: :destroy
+  has_many :reports, through: :report_children
+
   # Validações Básicas
   validates :full_name, presence: true, length: { maximum: 70 }
   validates :cpf, uniqueness: { allow_blank: true }, 
