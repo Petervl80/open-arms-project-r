@@ -17,7 +17,12 @@ Rails.application.routes.draw do
 
       post '/auth/login', to: 'authentication#login'
 
-      resources :user_accounts
+      resources :user_accounts do
+        member do
+          patch :toggle_status
+        end
+      end
+
       resources :children
 
       # Novas rotas dedicadas para exportação, apontando para o novo controller

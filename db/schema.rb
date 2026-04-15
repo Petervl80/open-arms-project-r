@@ -257,10 +257,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_14_132218) do
   end
 
   create_table "roles", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "code"
     t.datetime "created_at", null: false
     t.string "description"
+    t.string "name"
     t.datetime "updated_at", null: false
-    t.index ["description"], name: "index_roles_on_description"
+    t.index ["code"], name: "index_roles_on_code"
   end
 
   create_table "roles_user_accounts", id: false, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|

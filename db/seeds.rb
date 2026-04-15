@@ -34,15 +34,38 @@ puts "Tabelas de domínio migradas com sucesso!"
 
 puts "Criando usuário admin"
 
-admin_role = Role.find_or_create_by!(description: 'ROLE_ADMIN')
-user_role  = Role.find_or_create_by!(description: 'ROLE_USER')
+admin_role = Role.find_or_create_by!(code: 'ADMIN')
+tech_role  = Role.find_or_create_by!(code: 'TECHNICAL_TEAM')
+pedagogue_role  = Role.find_or_create_by!(code: 'PEDAGOGUE')
+educator_role  = Role.find_or_create_by!(code: 'EDUCATOR')
 
 admin = UserAccount.find_or_create_by!(email: 'admin@openarms.com') do |u|
   u.full_name = 'Administrador Sistema'
-  u.password = 'admin123' # O has_secure_password vai transformar isso em hash
+  u.password = 'admin123'
+  u.enabled = true
+end
+
+tech = UserAccount.find_or_create_by!(email: 'tech@openarms.com') do |u|
+  u.full_name = 'Technical team Sistema'
+  u.password = 'tech123'
+  u.enabled = true
+end
+
+pedagogue = UserAccount.find_or_create_by!(email: 'pedagogue@openarms.com') do |u|
+  u.full_name = 'Pedagogue Sistema'
+  u.password = 'pedagogue123'
+  u.enabled = true
+end
+
+educator = UserAccount.find_or_create_by!(email: 'educator@openarms.com') do |u|
+  u.full_name = 'Educator Sistema'
+  u.password = 'educator123'
   u.enabled = true
 end
 
 admin.roles << admin_role unless admin.roles.include?(admin_role)
+tech.roles << tech_role unless tech.roles.include?(tech_role)
+pedagogue.roles << pedagogue_role unless pedagogue.roles.include?(pedagogue_role)
+educator.roles << educator_role unless educator.roles.include?(educator_role)
 
-puts "Usuário Admin criado com sucesso!"
+puts "Usuários para teste criados com sucesso!"
