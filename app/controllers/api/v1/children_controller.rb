@@ -29,7 +29,6 @@ module Api
                     nested_contact.updated_by_id = @current_user.id
                 end
 
-                # VERIFIQUE AQUI: Deve ser @child.save, e NÃO @child.save!
                 if @child.save
                     render json: @child, status: :created
                 else
