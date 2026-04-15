@@ -24,6 +24,8 @@ Rails.application.routes.draw do
       end
 
       resources :children
+      resources :contacts
+      resources :roles
 
       # Novas rotas dedicadas para exportação, apontando para o novo controller
       scope :exports do
