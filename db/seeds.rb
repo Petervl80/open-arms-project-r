@@ -34,10 +34,10 @@ puts "Tabelas de domínio migradas com sucesso!"
 
 puts "Criando usuário admin"
 
-admin_role = Role.find_or_create_by!(code: 'ADMIN')
-tech_role  = Role.find_or_create_by!(code: 'TECHNICAL_TEAM')
-pedagogue_role  = Role.find_or_create_by!(code: 'PEDAGOGUE')
-educator_role  = Role.find_or_create_by!(code: 'EDUCATOR')
+admin_role = Role.find_or_create_by!(code: 'ADMIN', name: 'Admin')
+tech_role  = Role.find_or_create_by!(code: 'TECHNICAL_TEAM', name: 'Technical Team')
+pedagogue_role  = Role.find_or_create_by!(code: 'PEDAGOGUE', name: 'Pedagogue')
+educator_role  = Role.find_or_create_by!(code: 'EDUCATOR', name: 'Educator')
 
 admin = UserAccount.find_or_create_by!(email: 'admin@openarms.com') do |u|
   u.full_name = 'Administrador Sistema'

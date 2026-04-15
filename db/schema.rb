@@ -208,10 +208,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_14_132218) do
   end
 
   create_table "permissions", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "code", null: false
     t.datetime "created_at", null: false
-    t.string "description"
+    t.text "description"
     t.datetime "updated_at", null: false
-    t.index ["description"], name: "index_permissions_on_description"
+    t.index ["code"], name: "index_permissions_on_code", unique: true
   end
 
   create_table "permissions_roles", id: false, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -257,12 +258,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_14_132218) do
   end
 
   create_table "roles", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.string "code"
+    t.string "code", null: false
     t.datetime "created_at", null: false
-    t.string "description"
-    t.string "name"
+    t.text "description"
+    t.string "name", null: false
     t.datetime "updated_at", null: false
-    t.index ["code"], name: "index_roles_on_code"
+    t.index ["code"], name: "index_roles_on_code", unique: true
   end
 
   create_table "roles_user_accounts", id: false, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
