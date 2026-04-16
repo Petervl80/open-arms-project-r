@@ -5,7 +5,7 @@ module Api
       #before_action :require_technical_team!
 
       def index
-        records = model_class.all
+        records = model_class.respond_to?(:kept) ? model_class.kept : model_class.all
 
         if params[:child_id].present?
           records = records.where(child_id: params[:child_id])

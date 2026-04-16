@@ -1,4 +1,6 @@
 class FileAsset < ApplicationRecord
+  include Discard::Model
+
   belongs_to :file_type
 
   validates :original_file_name, :mime_type, :size_bytes, :storage_path_or_url, presence: true

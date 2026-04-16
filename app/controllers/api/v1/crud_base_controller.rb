@@ -4,7 +4,8 @@ module Api
       before_action :set_record, only: [:show, :update, :destroy]
 
       def index
-        render json: model_class.all, status: :ok
+        records = model_class.respond_to?(:kept) ? model_class.kept : model_class.all
+        render json: records, status: :ok
       end
 
       def show
@@ -38,7 +39,17 @@ module Api
       end
 
       def destroy
-        @record.destroy
+        
+        if @record.respond_to?(:discard)
+          @record.discard
+          
+          if @record.respond_to?(:updated_by_id=)
+            @record.update_column(:updated_by_id, @current_user.id)
+          end
+        else
+          @record.destroy
+        end
+        
         head :no_content
       end
 

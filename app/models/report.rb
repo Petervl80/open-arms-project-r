@@ -1,5 +1,7 @@
 # app/models/report.rb
 class Report < ApplicationRecord
+  include Discard::Model
+
   belongs_to :file_asset, foreign_key: 'file_id', optional: true
 
   belongs_to :updater, class_name: 'UserAccount', foreign_key: 'updated_by_id'

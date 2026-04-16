@@ -10,15 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_14_132218) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_16_182332) do
   create_table "action_plan_items", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.text "activity", null: false
     t.bigint "child_id", null: false
     t.datetime "created_at", null: false
     t.date "date", null: false
+    t.datetime "deleted_at"
     t.datetime "updated_at", null: false
     t.bigint "updated_by_id", null: false
     t.index ["child_id"], name: "index_action_plan_items_on_child_id"
+    t.index ["deleted_at"], name: "index_action_plan_items_on_deleted_at"
     t.index ["updated_by_id"], name: "index_action_plan_items_on_updated_by_id"
   end
 
@@ -27,10 +29,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_14_132218) do
     t.boolean "completed", default: false
     t.datetime "created_at", null: false
     t.date "date", null: false
+    t.datetime "deleted_at"
     t.text "description", null: false
     t.datetime "updated_at", null: false
     t.bigint "updated_by_id", null: false
     t.index ["child_id"], name: "index_alarms_on_child_id"
+    t.index ["deleted_at"], name: "index_alarms_on_deleted_at"
     t.index ["updated_by_id"], name: "index_alarms_on_updated_by_id"
   end
 
@@ -74,6 +78,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_14_132218) do
     t.text "controlled_medication_notes"
     t.string "cpf", limit: 14
     t.datetime "created_at", null: false
+    t.datetime "deleted_at"
     t.string "disability_notes", limit: 25
     t.date "discharge_date"
     t.string "discharge_reason", limit: 50
@@ -105,6 +110,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_14_132218) do
     t.bigint "updated_by_id", null: false
     t.index ["blood_type_id"], name: "index_children_on_blood_type_id"
     t.index ["cpf"], name: "index_children_on_cpf", unique: true
+    t.index ["deleted_at"], name: "index_children_on_deleted_at"
     t.index ["medical_report_file_id"], name: "index_children_on_medical_report_file_id"
     t.index ["photo_file_id"], name: "index_children_on_photo_file_id"
     t.index ["process_number"], name: "index_children_on_process_number"
@@ -117,6 +123,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_14_132218) do
   create_table "contacts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "city", limit: 50
     t.datetime "created_at", null: false
+    t.datetime "deleted_at"
     t.string "district", limit: 50
     t.bigint "family_side_id"
     t.string "full_name", limit: 50, null: false
@@ -127,6 +134,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_14_132218) do
     t.string "street", limit: 50
     t.datetime "updated_at", null: false
     t.bigint "updated_by_id", null: false
+    t.index ["deleted_at"], name: "index_contacts_on_deleted_at"
     t.index ["family_side_id"], name: "index_contacts_on_family_side_id"
     t.index ["updated_by_id"], name: "index_contacts_on_updated_by_id"
   end
@@ -135,10 +143,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_14_132218) do
     t.bigint "child_id", null: false
     t.datetime "created_at", null: false
     t.date "date", null: false
+    t.datetime "deleted_at"
     t.text "description"
     t.datetime "updated_at", null: false
     t.bigint "updated_by_id", null: false
     t.index ["child_id"], name: "index_family_events_on_child_id"
+    t.index ["deleted_at"], name: "index_family_events_on_deleted_at"
     t.index ["updated_by_id"], name: "index_family_events_on_updated_by_id"
   end
 
@@ -151,12 +161,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_14_132218) do
 
   create_table "file_assets", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.datetime "deleted_at"
     t.bigint "file_type_id", null: false
     t.string "mime_type", null: false
     t.string "original_file_name", null: false
     t.bigint "size_bytes", null: false
     t.string "storage_path_or_url", null: false
     t.datetime "updated_at", null: false
+    t.index ["deleted_at"], name: "index_file_assets_on_deleted_at"
     t.index ["file_type_id"], name: "index_file_assets_on_file_type_id"
   end
 
@@ -178,11 +190,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_14_132218) do
     t.bigint "child_id", null: false
     t.datetime "created_at", null: false
     t.date "date", null: false
+    t.datetime "deleted_at"
     t.bigint "health_event_type_id", null: false
     t.text "notes"
     t.datetime "updated_at", null: false
     t.bigint "updated_by_id", null: false
     t.index ["child_id"], name: "index_health_events_on_child_id"
+    t.index ["deleted_at"], name: "index_health_events_on_deleted_at"
     t.index ["health_event_type_id"], name: "index_health_events_on_health_event_type_id"
     t.index ["updated_by_id"], name: "index_health_events_on_updated_by_id"
   end
@@ -198,11 +212,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_14_132218) do
     t.bigint "child_id", null: false
     t.datetime "created_at", null: false
     t.date "date", null: false
+    t.datetime "deleted_at"
     t.bigint "individual_care_type_id", null: false
     t.text "notes"
     t.datetime "updated_at", null: false
     t.bigint "updated_by_id", null: false
     t.index ["child_id"], name: "index_individual_cares_on_child_id"
+    t.index ["deleted_at"], name: "index_individual_cares_on_deleted_at"
     t.index ["individual_care_type_id"], name: "index_individual_cares_on_individual_care_type_id"
     t.index ["updated_by_id"], name: "index_individual_cares_on_updated_by_id"
   end
@@ -249,10 +265,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_14_132218) do
   create_table "reports", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.date "date", null: false
+    t.datetime "deleted_at"
     t.string "description", null: false
     t.bigint "file_id"
     t.datetime "updated_at", null: false
     t.bigint "updated_by_id", null: false
+    t.index ["deleted_at"], name: "index_reports_on_deleted_at"
     t.index ["file_id"], name: "index_reports_on_file_id"
     t.index ["updated_by_id"], name: "index_reports_on_updated_by_id"
   end
@@ -282,11 +300,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_14_132218) do
     t.bigint "child_id", null: false
     t.datetime "created_at", null: false
     t.date "date", null: false
+    t.datetime "deleted_at"
     t.text "notes"
     t.bigint "school_event_type_id", null: false
     t.datetime "updated_at", null: false
     t.bigint "updated_by_id", null: false
     t.index ["child_id"], name: "index_school_progresses_on_child_id"
+    t.index ["deleted_at"], name: "index_school_progresses_on_deleted_at"
     t.index ["school_event_type_id"], name: "index_school_progresses_on_school_event_type_id"
     t.index ["updated_by_id"], name: "index_school_progresses_on_updated_by_id"
   end
@@ -302,10 +322,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_14_132218) do
     t.bigint "child_id", null: false
     t.datetime "created_at", null: false
     t.date "date", null: false
+    t.datetime "deleted_at"
     t.text "event"
     t.datetime "updated_at", null: false
     t.bigint "updated_by_id", null: false
     t.index ["child_id"], name: "index_social_activities_on_child_id"
+    t.index ["deleted_at"], name: "index_social_activities_on_deleted_at"
     t.index ["updated_by_id"], name: "index_social_activities_on_updated_by_id"
   end
 
@@ -314,10 +336,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_14_132218) do
     t.text "coexistence_notes"
     t.datetime "created_at", null: false
     t.date "date", null: false
+    t.datetime "deleted_at"
     t.text "rules_notes"
     t.datetime "updated_at", null: false
     t.bigint "updated_by_id", null: false
     t.index ["child_id"], name: "index_social_development_entries_on_child_id"
+    t.index ["deleted_at"], name: "index_social_development_entries_on_deleted_at"
     t.index ["updated_by_id"], name: "index_social_development_entries_on_updated_by_id"
   end
 
@@ -326,11 +350,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_14_132218) do
     t.boolean "account_non_locked", default: true
     t.datetime "created_at", null: false
     t.boolean "credentials_non_expired", default: true
+    t.datetime "deleted_at"
     t.string "email", null: false
     t.boolean "enabled", default: true
     t.string "full_name"
     t.string "password_digest"
     t.datetime "updated_at", null: false
+    t.index ["deleted_at"], name: "index_user_accounts_on_deleted_at"
     t.index ["email"], name: "index_user_accounts_on_email", unique: true
   end
 

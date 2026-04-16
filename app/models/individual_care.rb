@@ -1,4 +1,6 @@
 class IndividualCare < ApplicationRecord
+  include Discard::Model
+
   belongs_to :child
   belongs_to :individual_care_type
   belongs_to :updater, class_name: 'UserAccount', foreign_key: 'updated_by_id'

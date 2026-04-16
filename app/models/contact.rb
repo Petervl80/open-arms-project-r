@@ -1,4 +1,6 @@
 class Contact < ApplicationRecord
+    include Discard::Model
+
     belongs_to :family_side, optional: true
     
     belongs_to :updater, class_name: 'UserAccount', foreign_key: 'updated_by_id'

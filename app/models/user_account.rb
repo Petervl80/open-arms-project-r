@@ -1,4 +1,6 @@
 class UserAccount < ApplicationRecord
+  include Discard::Model
+
   has_secure_password # Isso gerencia a criptografia da senha automaticamente
   has_and_belongs_to_many :roles
   

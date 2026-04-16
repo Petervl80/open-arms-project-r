@@ -1,4 +1,6 @@
 class Child < ApplicationRecord
+  include Discard::Model
+
   # Relacionamentos com Tabelas de Domínio
   belongs_to :sex_type, optional: true
   belongs_to :race_type, optional: true
