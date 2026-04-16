@@ -28,6 +28,7 @@ Rails.application.routes.draw do
       resources :roles
       resources :permissions
       resources :health_events
+      resources :action_plan_items
 
       # Novas rotas dedicadas para exportação, apontando para o novo controller
       scope :exports do
