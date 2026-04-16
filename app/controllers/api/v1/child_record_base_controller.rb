@@ -13,11 +13,17 @@ module Api
 
         records = records.order(date: :desc)
 
+        # Prevenção de N+1 Queries
         if respond_to?(:includes_for_index, true)
           records = records.includes(includes_for_index)
         end
 
-        render json: records, include: respond_to?(:includes_for_index, true) ? includes_for_index : [], status: :ok
+        @pagy, paginated_records = pagy(records)
+
+        render json: {
+          data: paginated_records.as_json(include: respond_to?(:includes_for_index, true) ? includes_for_index : []),
+          meta: pagy_metadata(@pagy)
+        }, status: :ok
       end
 
       def show

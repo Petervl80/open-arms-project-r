@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::API
+  include Pagy::Method
 
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found 
 
@@ -32,6 +33,17 @@ class ApplicationController < ActionController::API
     # Tenta traduzir o nome do modelo (ex: "Child" vira "Criança" se o locale estiver em PT)
     model_name = exception.model.constantize.model_name.human rescue "Registro"
     render json: { error: "#{model_name} não encontrado(a) no sistema." }, status: :not_found
+  end
+
+  def pagy_metadata(pagy)
+    {
+      page: pagy.page,
+      limit: pagy.limit,
+      count: pagy.count,
+      pages: pagy.pages,
+      has_next: pagy.page < pagy.pages,
+      has_prev: pagy.page > 1
+    }
   end
 
 end

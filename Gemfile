@@ -40,7 +40,9 @@ gem 'axlsx_rails'
 # Para PDF
 gem 'wicked_pdf'
 
-gem 'discard'
+gem "pagy", "~> 43.5"
+
+gem "discard", "~> 1.4"
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin Ajax possible
 # gem "rack-cors"

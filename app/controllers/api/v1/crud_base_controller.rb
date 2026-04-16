@@ -5,7 +5,13 @@ module Api
 
       def index
         records = model_class.respond_to?(:kept) ? model_class.kept : model_class.all
-        render json: records, status: :ok
+
+        @pagy, paginated_records = pagy(records)
+
+        render json: {
+          data: paginated_records,
+          meta: pagy_metadata(@pagy)
+        }, status: :ok
       end
 
       def show
