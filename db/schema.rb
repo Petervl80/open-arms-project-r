@@ -302,7 +302,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_14_132218) do
     t.bigint "child_id", null: false
     t.datetime "created_at", null: false
     t.date "date", null: false
-    t.text "description"
+    t.text "event"
     t.datetime "updated_at", null: false
     t.bigint "updated_by_id", null: false
     t.index ["child_id"], name: "index_social_activities_on_child_id"

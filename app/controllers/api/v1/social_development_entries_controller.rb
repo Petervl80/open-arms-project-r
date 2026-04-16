@@ -5,7 +5,7 @@ module Api
             private
 
             def record_params
-                params.require(:school_event).permit(
+                params.require(:social_development_entry).permit(
                     :child_id,
                     :date,
                     :coexistence_notes,
