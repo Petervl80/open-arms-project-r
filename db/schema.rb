@@ -311,9 +311,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_14_132218) do
 
   create_table "social_development_entries", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "child_id", null: false
+    t.text "coexistence_notes"
     t.datetime "created_at", null: false
     t.date "date", null: false
-    t.text "description"
+    t.text "rules_notes"
     t.datetime "updated_at", null: false
     t.bigint "updated_by_id", null: false
     t.index ["child_id"], name: "index_social_development_entries_on_child_id"

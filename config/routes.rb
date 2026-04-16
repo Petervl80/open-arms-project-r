@@ -32,6 +32,7 @@ Rails.application.routes.draw do
       resources :family_events
       resources :individual_cares
       resources :school_progresses
+      resources :social_development_entries
 
       # Novas rotas dedicadas para exportação, apontando para o novo controller
       scope :exports do
