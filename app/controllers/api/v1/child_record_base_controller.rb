@@ -19,6 +19,10 @@ module Api
 
         render json: records, include: respond_to?(:includes_for_index, true) ? includes_for_index : [], status: :ok
       end
+
+      def show
+        render json: @record, include: respond_to?(:includes_for_index, true) ? includes_for_index : [], status: :ok 
+      end
     end
   end
 end
