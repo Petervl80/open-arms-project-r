@@ -150,12 +150,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_14_132218) do
   end
 
   create_table "file_assets", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.string "content_type", null: false
     t.datetime "created_at", null: false
-    t.string "file_name", null: false
     t.bigint "file_type_id", null: false
-    t.bigint "size", null: false
-    t.string "storage_path", null: false
+    t.string "mime_type", null: false
+    t.string "original_file_name", null: false
+    t.bigint "size_bytes", null: false
+    t.string "storage_path_or_url", null: false
     t.datetime "updated_at", null: false
     t.index ["file_type_id"], name: "index_file_assets_on_file_type_id"
   end
@@ -249,8 +249,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_14_132218) do
   create_table "reports", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.date "date", null: false
-    t.string "description", limit: 70, null: false
-    t.bigint "file_id", null: false
+    t.string "description", null: false
+    t.bigint "file_id"
     t.datetime "updated_at", null: false
     t.bigint "updated_by_id", null: false
     t.index ["file_id"], name: "index_reports_on_file_id"

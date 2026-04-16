@@ -36,6 +36,13 @@ Rails.application.routes.draw do
       resources :social_activities
       resources :alarms
 
+      resources :reports
+      resources :file_assets do
+        member do
+          get :download
+        end
+      end
+
       # Novas rotas dedicadas para exportação, apontando para o novo controller
       scope :exports do
         get 'children/:id/xlsx', to: 'exports#export_child_xlsx'
