@@ -46,8 +46,6 @@ module Api
 
       def set_record
         @record = model_class.find(params[:id])
-      rescue ActiveRecord::RecordNotFound
-        render json: { error: "#{model_class.model_name.human} não encontrado(a)" }, status: :not_found
       end
 
       def model_class

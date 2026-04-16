@@ -40,8 +40,6 @@ module Api
 
       def set_child
         @child = Child.find(params[:id])
-      rescue ActiveRecord::RecordNotFound
-        render json: { error: 'Criança não encontrada no sistema' }, status: :not_found
       end
     end
   end

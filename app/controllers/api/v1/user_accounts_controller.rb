@@ -85,8 +85,6 @@ module Api
 
             def set_user_account
                 @user_account = UserAccount.find(params[:id])
-            rescue ActiveRecord::RecordNotFound
-                render json: { error: 'Usuário não encontrado' }, status: :not_found
             end
 
             def user_account_params

@@ -1,5 +1,7 @@
 class ApplicationController < ActionController::API
 
+  rescue_from ActiveRecord::RecordNotFound, with: :record_not_found 
+
   before_action :authorize_request
 
   private
@@ -25,4 +27,11 @@ class ApplicationController < ActionController::API
       render json: { errors: 'Acesso negado. Formato esperado no Header: Authorization: Bearer <token>' }, status: :unauthorized
     end
   end
+
+  def record_not_found(exception)
+    # Tenta traduzir o nome do modelo (ex: "Child" vira "Criança" se o locale estiver em PT)
+    model_name = exception.model.constantize.model_name.human rescue "Registro"
+    render json: { error: "#{model_name} não encontrado(a) no sistema." }, status: :not_found
+  end
+
 end

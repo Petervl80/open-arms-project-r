@@ -10,8 +10,6 @@ module Api
             def show 
                 domain = model_class.find(params[:id])
                 render json: domain, status: :ok
-            rescue ActiveRecord::RecordNotFound
-                render json: { error: "#{model_class.name} não encontrado" }, status: :not_found
             end
 
             private
