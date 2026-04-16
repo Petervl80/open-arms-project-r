@@ -29,6 +29,7 @@ Rails.application.routes.draw do
       resources :permissions
       resources :health_events
       resources :action_plan_items
+      resources :family_events
 
       # Novas rotas dedicadas para exportação, apontando para o novo controller
       scope :exports do
