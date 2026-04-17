@@ -51,11 +51,15 @@ module Api
             def destroy 
                 file_path = @record.storage_path_or_url
 
-                if @record.destroy
-                    File.delete(file_path) if file_path.present? && File.exist?(file_path)
+                if @record.discard # <-- Muda de destroy para discard
+                    # Você pode optar por não apagar o arquivo físico aqui para manter a auditoria.
+                    # Caso decida apagar, descomente a linha abaixo ciente de que o arquivo não poderá ser restaurado.
+                    # File.delete(file_path) if file_path.present? && File.exist?(file_path)
+                    
+                    @record.update_column(:updated_by_id, @current_user.id)
                     head :no_content
                 else
-                    render json: { errors: 'Não foi possível deletar o arquivo' }, status: :unprocessable_entity
+                    render json: { errors: 'Não foi possível desativar o arquivo' }, status: :unprocessable_entity
                 end
             end
 

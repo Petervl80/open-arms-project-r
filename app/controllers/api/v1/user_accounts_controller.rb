@@ -71,7 +71,7 @@ module Api
 
             # PATCH /api/v1/user_accounts/:id/toggle_status
             def toggle_status
-                if @user_account.update(enabled: !user_account.enabled)
+                if @user_account.update(enabled: !@user_account.enabled)
                     render json: {
                         message: "Usuário #{@user_account.enabled ? 'ativado' : 'desativado'} com sucesso",
                         enabled: @user_account.enabled

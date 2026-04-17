@@ -1,3 +1,5 @@
+require "cpf_cnpj"
+
 class Child < ApplicationRecord
   include Discard::Model
 
@@ -34,8 +36,7 @@ class Child < ApplicationRecord
 
   # Validações Básicas
   validates :full_name, presence: true, length: { maximum: 70 }
-  validates :cpf, uniqueness: { allow_blank: true }, 
-                  format: { with: /\A\d{11}\z/, message: "deve conter 11 dígitos", allow_blank: true }
+  validate :cpf_must_be_valid
   
   validate :birth_date_cannot_be_in_the_future
 
@@ -44,6 +45,12 @@ class Child < ApplicationRecord
   def birth_date_cannot_be_in_the_future
     if birth_date.present? && birth_date > Date.today
       errors.add(:birth_date, "não pode ser uma data futura")
+    end
+  end
+
+  def cpf_must_be_valid
+    if cpf.present? && !CPF.valid?(cpf)
+      errors.add(:cpf, "não é um CPF válido")
     end
   end
 end
