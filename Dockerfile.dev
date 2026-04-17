@@ -1,0 +1,21 @@
+# Dockerfile.dev
+FROM ruby:3.4.9-slim
+
+WORKDIR /rails
+
+# Instala as dependências do sistema necessárias para compilar as gems
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y build-essential default-libmysqlclient-dev git libvips pkg-config default-mysql-client libyaml-dev && \
+    rm -rf /var/lib/apt/lists /var/cache/apt/archives
+
+# Copia os arquivos do Bundler e instala as gems
+COPY Gemfile Gemfile.lock ./
+RUN bundle install
+
+# O código será montado via volume no docker-compose, mas copiamos por garantia
+COPY . .
+
+EXPOSE 3000
+
+# Remove o server.pid (caso o servidor tenha caído) e inicia o Rails
+CMD ["bash", "-c", "rm -f tmp/pids/server.pid && bin/rails server -b '0.0.0.0'"]

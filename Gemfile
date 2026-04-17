@@ -29,13 +29,15 @@ gem "thruster", require: false
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 gem "image_processing", "~> 1.2"
 
+gem 'redis', '~> 4.0.1'
+
 # Auth
 gem "bcrypt", "~> 3.1.7"
 gem "jwt"
 
 # Para Excel
 gem 'caxlsx'
-gem 'axlsx_rails'
+gem 'caxlsx_rails'
 
 # Para PDF
 gem 'wicked_pdf'

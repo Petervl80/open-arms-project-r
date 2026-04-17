@@ -8,14 +8,51 @@ services:
       MYSQL_ROOT_PASSWORD: admin123
       MYSQL_USER: docker
       MYSQL_PASSWORD: admin123
-      MYSQL_DATABASE: open_arms_db
+      MYSQL_DATABASE: open_arms_db_development
     ports:
       - "3308:3306"
-    expose:
-      - 3308
+    networks:
+      - open-arms-network
+    volumes:
+      - db_data:/var/lib/mysql
+
+  redis:
+    container_name: redis
+    image: redis:7-alpine
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - open-arms-network
+
+  web:
+    container_name: open_arms_web
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    restart: always
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/rails
+      - bundle_data:/usr/local/bundle
+    environment:
+      - RAILS_ENV=development
+      - DATABASE_URL=mysql2://docker:admin123@db:3306/open_arms_db_development
+      - REDIS_URL=redis://redis:6379/1
+    depends_on:
+      - db
+      - redis
     networks:
       - open-arms-network
 
 networks:
   open-arms-network:
     driver: bridge
+
+volumes:
+  db_data:
+  redis_data:
+  bundle_data:
