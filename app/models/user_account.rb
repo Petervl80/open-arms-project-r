@@ -17,4 +17,10 @@ class UserAccount < ApplicationRecord
   def privileged?
     admin? || technical_team?
   end
+
+  def has_permission?(permission_code)
+    return true if admin? 
+    
+    roles.joins(:permissions).where(permissions: { code: permission_code }).exists?
+  end
 end

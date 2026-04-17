@@ -2,7 +2,11 @@ module Api
   module V1
     class ChildrenController < CrudBaseController
       
-      #before_action :require_technical_team!, only: [:create, :update, :destroy]
+      # Libera o GET para quem tem CHILD_READ
+      before_action -> { require_permission!('CHILD_READ') }, only: [:index, :show]
+  
+      # Bloqueia POST, PUT, DELETE apenas para quem tem CHILD_WRITE
+      before_action -> { require_permission!('CHILD_WRITE') }, only: [:create, :update, :destroy]
 
       private
 

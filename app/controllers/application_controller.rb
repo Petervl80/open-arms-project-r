@@ -7,6 +7,18 @@ class ApplicationController < ActionController::API
 
   private
 
+  def require_permission!(permission_code)
+    unless @current_user&.has_permission?(permission_code)
+      render json: { error: "Acesso negado. Necessária a permissão: #{permission_code}" }, status: :forbidden
+    end
+  end
+  
+  def require_admin!
+    unless @current_user&.admin?
+      render json: { error: 'Acesso negado. Apenas administradores.' }, status: :forbidden
+    end
+  end
+
   def authorize_request
     
     header = request.headers['Authorization']
