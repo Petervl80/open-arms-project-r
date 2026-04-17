@@ -6,22 +6,22 @@ module Api
 
       def index
         records = model_class.respond_to?(:kept) ? model_class.kept : model_class.all
-        
         records = records.order(:full_name).includes(:sex_type, :race_type, :process_type)
 
-        @pagy, paginated_records = pagy(records)
+        requested_limit = params.fetch(:limit, 20).to_i
+        safe_limit = [requested_limit, 100].min
+        @pagy, paginated_records = pagy(records, limit: safe_limit)
 
         render json: {
-          data: paginated_records.as_json(include: [:sex_type, :race_type, :process_type]),
+          data: ChildBlueprint.render_as_hash(paginated_records, view: :extended),
           meta: pagy_metadata(@pagy)
         }, status: :ok
       end
 
       def show
-        render json: @record, include: [
-          :sex_type, :race_type, :blood_type, :process_type,
-          { child_contacts: { include: [:contact, :child_contact_role] } }
-        ], status: :ok
+        render json: {
+          data: ChildBlueprint.render_as_hash(@record, view: :extended)
+        }, status: :ok
       end
 
       def create
