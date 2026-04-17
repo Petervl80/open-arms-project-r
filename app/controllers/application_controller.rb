@@ -31,6 +31,11 @@ class ApplicationController < ActionController::API
       begin
         @decoded = JsonWebToken.decode(token)
         @current_user = UserAccount.find(@decoded[:user_id])
+
+        unless @current_user.enabled?
+          return render json: { errors: 'Sua conta foi desativada. Entre em contato com a administração.' }, status: :unauthorized
+        end
+
       rescue ActiveRecord::RecordNotFound => e
         render json: { errors: 'Usuário não encontrado' }, status: :unauthorized
       rescue JWT::DecodeError => e
